@@ -59,12 +59,6 @@ function continueCalculatingPrimes(primes, lastChecked, resultDiv, currentNumber
 }
 
 function displayPrimes(primes, resultDiv) {
-    resultDiv.innerHTML = ''; // Effacer le contenu actuel
-    
-    // Créer une liste de nombres premiers avec chaque nombre sur une nouvelle ligne
-    primes.forEach(prime => {
-        const primeElement = document.createElement('div');
-        primeElement.textContent = prime;
-        resultDiv.appendChild(primeElement);
-    });
+    // Afficher chaque nombre premier sur une nouvelle ligne
+    resultDiv.textContent = primes.join('\n');
 }
