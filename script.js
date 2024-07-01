@@ -2,36 +2,28 @@ document.getElementById('calculate').addEventListener('click', () => {
     const resultDiv = document.getElementById('result');
     const currentNumberDiv = document.getElementById('current-number');
 
-    if (typeof(Storage) !== "undefined") {
-        let primes = JSON.parse(localStorage.getItem('primes')) || [];
-        let lastChecked = JSON.parse(localStorage.getItem('lastChecked')) || 1;
+    let primes = JSON.parse(localStorage.getItem('primes')) || [];
+    let lastChecked = JSON.parse(localStorage.getItem('lastChecked')) || 1;
 
-        if (primes.length > 0) {
-            displayPrimes(primes, resultDiv);
-        } else {
-            resultDiv.textContent = 'Calcul en cours...';
-        }
-
-        continueCalculatingPrimes(primes, lastChecked, resultDiv, currentNumberDiv);
+    if (primes.length > 0) {
+        displayPrimes(primes, resultDiv);
     } else {
-        // Local Storage not available, start from zero
-        let primes = [];
-        let lastChecked = 1;
-
         resultDiv.textContent = 'Calcul en cours...';
-        continueCalculatingPrimes(primes, lastChecked, resultDiv, currentNumberDiv);
     }
+
+    continueCalculatingPrimes(primes, lastChecked, resultDiv, currentNumberDiv);
 });
 
 function continueCalculatingPrimes(primes, lastChecked, resultDiv, currentNumberDiv) {
     const batchSize = 100; // Nombre de nombres à vérifier par batch
+    let totalPrimes = primes.length;
 
     function calculateBatch() {
         let num = lastChecked + 1;
         let count = 0;
 
         while (count < batchSize) {
-            currentNumberDiv.textContent = `Calcul du nombre actuel : ${num}`;
+            currentNumberDiv.textContent = `Nombre actuel : ${num} | Nombres premiers trouvés : ${totalPrimes}`;
             let isPrime = true;
             for (let i = 0; i < primes.length; i++) {
                 if (primes[i] > Math.sqrt(num)) break;
@@ -42,6 +34,7 @@ function continueCalculatingPrimes(primes, lastChecked, resultDiv, currentNumber
             }
             if (isPrime) {
                 primes.push(num);
+                totalPrimes++;
                 count++;
             }
             num++;
@@ -50,12 +43,13 @@ function continueCalculatingPrimes(primes, lastChecked, resultDiv, currentNumber
         lastChecked = num - 1;
 
         // Mettre à jour le local storage
-        if (typeof(Storage) !== "undefined") {
-            localStorage.setItem('primes', JSON.stringify(primes));
-            localStorage.setItem('lastChecked', JSON.stringify(lastChecked));
-        }
+        localStorage.setItem('primes', JSON.stringify(primes));
+        localStorage.setItem('lastChecked', JSON.stringify(lastChecked));
 
         displayPrimes(primes, resultDiv);
+
+        // Auto-scroll vers le bas
+        resultDiv.scrollTop = resultDiv.scrollHeight;
 
         // Continuer à calculer après un court délai pour ne pas bloquer l'UI
         setTimeout(calculateBatch, 10);
@@ -65,5 +59,5 @@ function continueCalculatingPrimes(primes, lastChecked, resultDiv, currentNumber
 }
 
 function displayPrimes(primes, resultDiv) {
-    resultDiv.textContent = 'Les nombres premiers sont :\n' + primes.join(', ');
+    resultDiv.textContent = 'Les nombres premiers trouvés :\n' + primes.join(', ');
 }
