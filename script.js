@@ -59,6 +59,5 @@ function continueCalculatingPrimes(primes, lastChecked, resultDiv, currentNumber
 }
 
 function displayPrimes(primes, resultDiv) {
-    // Afficher chaque nombre premier sur une nouvelle ligne
-    resultDiv.textContent = primes.join('\n');
+    resultDiv.textContent = 'Les nombres premiers trouvés :\n' + primes.join(', ');
 }
