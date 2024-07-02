@@ -1,19 +1,3 @@
-document.getElementById('calculate').addEventListener('click', () => {
-    const resultDiv = document.getElementById('result');
-    const currentNumberDiv = document.getElementById('current-number');
-
-    let primes = JSON.parse(localStorage.getItem('primes')) || [];
-    let lastChecked = JSON.parse(localStorage.getItem('lastChecked')) || 1;
-
-    if (primes.length > 0) {
-        displayPrimes(primes, resultDiv);
-    } else {
-        resultDiv.textContent = 'Calcul en cours...';
-    }
-
-    continueCalculatingPrimes(primes, lastChecked, resultDiv, currentNumberDiv);
-});
-
 function continueCalculatingPrimes(primes, lastChecked, resultDiv, currentNumberDiv) {
     const batchSize = 100; // Nombre de nombres à vérifier par batch
     let totalPrimes = primes.length;
@@ -59,5 +43,6 @@ function continueCalculatingPrimes(primes, lastChecked, resultDiv, currentNumber
 }
 
 function displayPrimes(primes, resultDiv) {
-    resultDiv.textContent = 'Les nombres premiers trouvés :\n' + primes.join(', ');
+    // Créer une liste HTML avec chaque nombre premier sur une ligne
+    resultDiv.innerHTML = primes.map(prime => `<div>${prime}</div>`).join('');
 }
